@@ -14,14 +14,16 @@ const weatherIconEl = document.getElementById('weather-icon');
 const forecastContainer = document.getElementById('forecast-container');
 const errorEl = document.getElementById('error-message');
 const themeToggleBtn = document.getElementById('theme-toggle');
+const profilePicEl = document.getElementById('profile-pic');
+const firstNameEl = document.getElementById('first-name');
 
-// Theme toggle
+// --- Theme toggle ---
 themeToggleBtn.addEventListener('click', () => {
     document.body.classList.toggle('dark');
     themeToggleBtn.textContent = document.body.classList.contains('dark') ? '☀️ Light Mode' : '🌙 Dark Mode';
 });
 
-// Search Event
+// --- Search Event ---
 searchBtn.addEventListener('click', () => {
     const city = cityInput.value.trim();
     if (city) getWeatherData(city);
@@ -32,21 +34,24 @@ cityInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') searchBtn.click();
 });
 
-// On load, use geolocation
+// --- On Load ---
 window.onload = () => {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (pos) => {
-                const { latitude, longitude } = pos.coords;
-                getWeatherData(`${latitude},${longitude}`);
-            },
-            () => getWeatherData('New York') // fallback if location denied
-        );
+    // Default weather: Addis Ababa
+    getWeatherData('Addis Ababa');
+
+    // Get Telegram user profile
+    if (Telegram.WebApp.initDataUnsafe?.user) {
+        const user = Telegram.WebApp.initDataUnsafe.user;
+        firstNameEl.textContent = user.first_name;
+        // Profile picture from user photo (usually available in Web App avatar if any)
+        profilePicEl.src = user?.photo_url || 'https://via.placeholder.com/50';
     } else {
-        getWeatherData('New York'); // fallback
+        firstNameEl.textContent = 'Guest';
+        profilePicEl.src = 'https://via.placeholder.com/50';
     }
 };
 
+// --- Fetch Weather ---
 async function getWeatherData(city) {
     clearError();
     clearForecast();
@@ -69,6 +74,7 @@ async function getWeatherData(city) {
     }
 }
 
+// --- Display Current Weather ---
 function displayCurrentWeather(data) {
     const { current, location } = data;
 
@@ -78,7 +84,6 @@ function displayCurrentWeather(data) {
     humidityEl.textContent = `${current.humidity}%`;
     windSpeedEl.textContent = `${current.wind_kph.toFixed(1)} km/h`;
 
-    // Fix icon URL (ensure https)
     const iconUrl = current.condition.icon.startsWith('//') ? 'https:' + current.condition.icon : current.condition.icon;
     weatherIconEl.src = iconUrl;
     weatherIconEl.alt = current.condition.text;
@@ -86,9 +91,9 @@ function displayCurrentWeather(data) {
     hideLoadingState();
 }
 
+// --- Display 2-Day Forecast ---
 function displayForecast(data) {
     clearForecast();
-
     const forecastList = data.forecast.forecastday.slice(1, 3); // 2-day forecast
     const formatter = new Intl.DateTimeFormat('en-US', { weekday: 'short' });
 
@@ -112,7 +117,7 @@ function displayForecast(data) {
     });
 }
 
-// Helper functions
+// --- Helpers ---
 function displayError(message) {
     errorEl.textContent = `🚨 ${message}`;
     cityNameEl.textContent = '---';
@@ -135,5 +140,4 @@ function showLoadingState() {
         forecastContainer.appendChild(card);
     }
 }
-
-function hideLoadingState() { /* skeleton replaced automatically */ }
+function hideLoadingState() {}
