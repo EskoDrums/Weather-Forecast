@@ -263,3 +263,7 @@ body.dark .weather-display {
     color: #fff;
 }
 
+
+#aadsstickymgwgudhm:checked + div {
+    display: none;
+}
