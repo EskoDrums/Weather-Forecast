@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherW Forecast 🌤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <header class="header">
+            <h1>Weather Forecast 🌤️</h1>
+
+            <!-- Theme Toggle -->
+            <button id="theme-toggle">🌙 Dark Mode</button>
+
+            <div class="search-box">
+                <input type="text" id="city-input" placeholder="Enter City Name (e.g., London)" autofocus>
+                <button id="search-btn">Get Weather</button>
+            </div>
+            <p id="error-message" class="error-text"></p>
+        </header>
+
+        <main class="weather-display">
+            <h2 id="city-name"></h2>
+            <div class="current-weather">
+                <div class="icon-temp">
+                    <img id="weather-icon" src="" alt="Weather Icon">
+                    <p id="temperature" class="temp"></p>
+                </div>
+                <div class="details">
+                    <p id="description" class="description"></p>
+                    <p>Humidity: <span id="humidity"></span></p>
+                    <p>Wind Speed: <span id="wind-speed"></span></p>
+                </div>
+            </div>
+        </main>
+
+        <section class="forecast-section">
+            <h3>2-Day Forecast</h3>
+            <div class="forecast-container" id="forecast-container">
+                <div class="forecast-card skeleton"></div>
+                <div class="forecast-card skeleton"></div>
+                <div class="forecast-card skeleton"></div>
+                <div class="forecast-card skeleton"></div>
+                <div class="forecast-card skeleton"></div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
